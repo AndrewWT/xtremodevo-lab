@@ -53,7 +53,7 @@
     </div>
   </section>
 
-  <!-- ===== RESEARCH SECTION ===== -->
+  <!-- ===== RESEARCH ===== -->
   <section id="research" class="section">
     <div class="container">
       <h2>Research</h2>
@@ -91,7 +91,7 @@
     </div>
   </section>
 
-  <!-- ===== PEOPLE SECTION ===== -->
+  <!-- ===== PEOPLE ===== -->
   <section id="people" class="section section-alt">
     <div class="container">
       <h2>People</h2>
@@ -101,7 +101,6 @@
       </p>
 
       <div class="card-grid people-grid">
-        <!-- PI card -->
         <article class="card person-card">
           <h3>Andrew Thompson, Ph.D.</h3>
           <p class="person-role">Principal Investigator</p>
@@ -114,7 +113,6 @@
           </p>
         </article>
 
-        <!-- Example trainee card -->
         <article class="card person-card">
           <h3>Lab Member Name</h3>
           <p class="person-role">Graduate Student</p>
@@ -135,7 +133,7 @@
     </div>
   </section>
 
-  <!-- ===== PUBLICATIONS SECTION ===== -->
+  <!-- ===== PUBLICATIONS ===== -->
   <section id="publications" class="section">
     <div class="container">
       <h2>Publications</h2>
@@ -149,7 +147,7 @@
     </div>
   </section>
 
-  <!-- ===== RESOURCES SECTION ===== -->
+  <!-- ===== RESOURCES ===== -->
   <section id="resources" class="section section-alt">
     <div class="container">
       <h2>Resources</h2>
@@ -170,23 +168,21 @@
         <article class="card">
           <h3>Protocols</h3>
           <p>
-            Standard operating procedures for killifish and pearlfish husbandry, imaging, and molecular
-            workflows.
+            Standard operating procedures for killifish and pearlfish husbandry, imaging, and molecular workflows.
           </p>
         </article>
 
         <article class="card">
           <h3>Teaching materials</h3>
           <p>
-            Slides, problem sets, and datasets from courses and workshops related to bioinformatics and
-            developmental genetics.
+            Slides, problem sets, and datasets from courses and workshops related to bioinformatics and developmental genetics.
           </p>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- ===== JOIN SECTION ===== -->
+  <!-- ===== JOIN ===== -->
   <section id="join" class="section">
     <div class="container">
       <h2>Join the Lab</h2>
@@ -233,7 +229,7 @@
     </div>
   </section>
 
-  <!-- ===== CONTACT / FOOTER ===== -->
+  <!-- ===== FOOTER ===== -->
   <footer id="contact" class="site-footer">
     <div class="container footer-grid">
       <div>
@@ -245,6 +241,7 @@
           <a href="mailto:YOUR_EMAIL@youruniversity.edu">YOUR_EMAIL@youruniversity.edu</a>
         </p>
       </div>
+
       <div>
         <h3>Links</h3>
         <ul class="footer-links">
@@ -254,82 +251,35 @@
           <li><a href="https://scholar.google.com" target="_blank" rel="noopener">Google Scholar</a></li>
         </ul>
       </div>
+
       <div>
         <h3>Last updated</h3>
         <p>December 2025</p>
       </div>
     </div>
+
     <div class="footer-bottom">
       <p>&copy; <span id="year"></span> Xtremo-Devo Lab. All rights reserved.</p>
     </div>
 
-    <!-- Auto year -->
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>
 
-    <!-- BibTeX Parser -->
     <script src="https://unpkg.com/bibtex-parse-js@0.0.24/bibtexParse.js"></script>
 
-    <!-- Render publications: decode LaTeX accents + group by year -->
     <script>
       function decodeLatex(str) {
         if (!str) return "";
         return str
-          // common accent patterns from your BibTeX
           .replace(/\{\\'i\}/g, "í")
-          .replace(/\{\\'I\}/g, "Í")
           .replace(/\{\\'e\}/g, "é")
-          .replace(/\{\\'E\}/g, "É")
+          .replace(/\{\\'o\}/g, "ó")
+          .replace(/\{\\'u\}/g, "ú")
           .replace(/\{\\'a\}/g, "á")
-          .replace(/\{\\'A\}/g, "Á")
-          .replace(/\{\\'o\}/g, "ó")
-          .replace(/\{\\'O\}/g, "Ó")
-          .replace(/\{\\'u\}/g, "ú")
-          .replace(/\{\\'U\}/g, "Ú")
-          .replace(/\{\\'c\}/g, "ć")
-          .replace(/\{\\'C\}/g, "Ć")
-          .replace(/\{\\'\\i\}/g, "í") // sometimes i is written as \i
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\\i\}/g, "í")
-          .replace(/\{\\'\\\i\}/g, "í")
-          .replace(/\{\\'\\\i\}/g, "í")
-          .replace(/\{\\'\\\i\}/g, "í")
-          .replace(/\{\\'\\\i\}/g, "í")
-          .replace(/\{\\'\\\i\}/g, "í")
-          // specific names from your list
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'o\}/g, "ó")
-          .replace(/\{\\'u\}/g, "ú")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          // more general cleanup
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          .replace(/\{\\'\\i\}/g, "í")
-          // specific braces like {\AA}
           .replace(/\{\\AA\}/g, "Å")
-          .replace(/\{\\aa\}/g, "å")
-          // ampersand + dashes
           .replace(/\\&/g, "&")
           .replace(/--/g, "–")
-          // remove leftover braces
           .replace(/[{}]/g, "");
       }
 
@@ -338,93 +288,55 @@
           const res = await fetch("publications.bib");
           if (!res.ok) throw new Error("publications.bib not found");
 
-          const bibText = await res.text();
-          const entries = bibtexParse.toJSON(bibText);
+          const entries = bibtexParse.toJSON(await res.text());
 
-          // group by year
           const groups = {};
           entries.forEach(e => {
-            const t = e.entryTags || {};
-            const year = t.year || "Other";
-            if (!groups[year]) groups[year] = [];
-            groups[year].push(e);
+            const y = e.entryTags?.year || "Preprints";
+            if (!groups[y]) groups[y] = [];
+            groups[y].push(e);
           });
 
-          // sort years descending (numeric years first)
-          const years = Object.keys(groups).sort((a, b) => {
-            const ya = parseInt(a) || 0;
-            const yb = parseInt(b) || 0;
-            return yb - ya;
-          });
+          const years = Object.keys(groups).sort((a,b) => (parseInt(b)||0)-(parseInt(a)||0));
 
           const container = document.getElementById("pubs");
           container.innerHTML = "";
 
           years.forEach(year => {
-            const yearEntries = groups[year];
-
-            // year heading
-            const yearBlock = document.createElement("div");
-            yearBlock.className = "pub-year-block";
-            yearBlock.innerHTML = `<h3 class="pub-year-heading">${year}</h3>`;
+            const block = document.createElement("div");
+            block.innerHTML = `<h3 class="pub-year-heading">${year}</h3>`;
             
-            yearEntries.forEach(e => {
+            groups[year].forEach(e => {
               const t = e.entryTags || {};
-              let authors = decodeLatex(t.author || "");
-              let title = decodeLatex(t.title || "");
-              let journal = decodeLatex(t.journal || t.booktitle || "");
-              let publisher = decodeLatex(t.publisher || "");
+              
+              const rawAuthors = decodeLatex(t.author || "");
+              const authors = rawAuthors.split(/\s+and\s+/).join(", ")
+                .replace(/Andrew W\. Thompson/g, "<strong><u>Andrew W. Thompson</u></strong>")
+                .replace(/Thompson, Andrew W\./g, "<strong><u>Thompson, Andrew W.</u></strong>")
+                .replace(/Thompson, A\. W\./g, "<strong><u>Thompson, A. W.</u></strong>");
 
-              const volume = t.volume ? ` ${decodeLatex(t.volume)}` : "";
-              const number = t.number ? `(${decodeLatex(t.number)})` : "";
+              const title = decodeLatex(t.title || "");
+              const journal = decodeLatex(t.journal || t.booktitle || "");
+              const publisher = decodeLatex(t.publisher || "");
+
+              const volume = t.volume ? ` ${t.volume}` : "";
+              const number = t.number ? `(${t.number})` : "";
               const pages = t.pages ? `, ${decodeLatex(t.pages)}` : "";
 
-              // bold your name
-              authors = authors
-                .replace(/Andrew W\. Thompson/g, "<strong>Andrew W. Thompson</strong>")
-                .replace(/Thompson, Andrew W\./g, "<strong>Thompson, Andrew W.</strong>")
-                .replace(/Thompson, A\. W\./g, "<strong>Thompson, A. W.</strong>");
-
-              const doi = t.doi || "";
-              const url = t.url || "";
-              let linkHTML = "";
-              if (doi) {
-                const doiURL = doi.startsWith("http") ? doi : `https://doi.org/${doi}`;
-                linkHTML = ` <a href="${doiURL}" target="_blank" rel="noopener">DOI</a>`;
-              } else if (url) {
-                linkHTML = ` <a href="${url}" target="_blank" rel="noopener">Link</a>`;
-              }
-
-              const citationParts = [];
-              if (authors) citationParts.push(`${authors}.`);
-              if (year && year !== "Other") citationParts.push(`(${year}).`);
-              if (title) citationParts.push(`${title}.`);
-
-              let venue = "";
-              if (journal) venue = `<em>${journal}</em>`;
-              else if (publisher) venue = publisher;
-
-              const trailing = `${venue}${volume}${number}${pages}`;
-
-              const article = document.createElement("article");
-              article.className = "pub-item";
-              article.innerHTML = `
-                <p class="pub-citation">
-                  ${citationParts.join(" ")}
-                  ${trailing}
-                  ${linkHTML}
-                </p>
-              `;
-
-              yearBlock.appendChild(article);
+              block.innerHTML += `
+                <article class="pub-item">
+                  <p class="pub-citation">
+                    ${authors}. (${year}). ${title}.
+                    ${journal ? `<em>${journal}</em>` : publisher}${volume}${number}${pages}
+                  </p>
+                </article>`;
             });
 
-            container.appendChild(yearBlock);
+            container.appendChild(block);
           });
 
-        } catch (err) {
+        } catch {
           document.getElementById("pubs").innerHTML = "Unable to load publications at this time.";
-          console.error(err);
         }
       }
 
