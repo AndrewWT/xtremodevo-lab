@@ -339,38 +339,36 @@
             groups[year].forEach(e => {
               const t = e.entryTags || {};
 
-              // decode and normalize authors
+              // decode and normalize authors (comma-separated, no trailing . or ,)
               const rawAuthors = decodeLatex(t.author || "");
               let authors = rawAuthors.split(/\s+and\s+/).join(", ");
+              authors = authors.trim().replace(/[.,]\s*$/, "");
 
-              // === highlight your name (bold + underline) ===
-              authors = authors
-                // "Thompson, Andrew W," or "Thompson, Andrew W."
-                .replace(/Thompson, Andrew W(?=[,\.]|$)/g, "<strong><u>Thompson, Andrew W</u></strong>")
-                // "Andrew W Thompson"
-                .replace(/Andrew W Thompson(?=[,\.]|$)/g, "<strong><u>Andrew W Thompson</u></strong>")
-                // "Thompson, A. W." variant
-                .replace(/Thompson, A\. W\.(?=[,]|$)/g, "<strong><u>Thompson, A. W.</u></strong>");
+              // decode and clean title / venue
+              let title = decodeLatex(t.title || "");
+              title = title.trim().replace(/[.]\s*$/, "");
 
-              const title = decodeLatex(t.title || "");
-              const journal = decodeLatex(t.journal || t.booktitle || "");
-              const publisher = decodeLatex(t.publisher || "");
+              let venue = decodeLatex(t.journal || t.booktitle || t.publisher || "");
+              venue = venue.trim().replace(/[.]\s*$/, "");
 
-              const volume = t.volume ? ` ${decodeLatex(t.volume)}` : "";
-              const number = t.number ? `(${decodeLatex(t.number)})` : "";
-              const pages = t.pages ? `, ${decodeLatex(t.pages)}` : "";
+              const volume = t.volume ? ` ${decodeLatex(t.volume).trim()}` : "";
+              const number = t.number ? `(${decodeLatex(t.number).trim()})` : "";
+              const pages = t.pages ? `, ${decodeLatex(t.pages).trim()}` : "";
 
-              const venue = journal ? `<em>${journal}</em>` : publisher;
+              const yearLabel = year !== "Preprints" ? `(${year}).` : "(Preprint).";
+
+              // build plain-text citation first
+              let citation = `${authors}. ${yearLabel} ${title}. ${venue}${volume}${number}${pages}`;
+
+              // now bold+underline YOUR name in the final string
+              citation = citation
+                .replace(/Thompson, Andrew W/g, "<strong><u>Thompson, Andrew W</u></strong>")
+                .replace(/Andrew W Thompson/g, "<strong><u>Andrew W Thompson</u></strong>")
+                .replace(/Thompson, A\. W\./g, "<strong><u>Thompson, A. W.</u></strong>");
 
               const article = document.createElement("article");
               article.className = "pub-item";
-              article.innerHTML = `
-                <p class="pub-citation">
-                  ${authors}. ${year !== "Preprints" ? `(${year}).` : "(Preprint)."}
-                  ${title}.
-                  ${venue}${volume}${number}${pages}
-                </p>
-              `;
+              article.innerHTML = `<p class="pub-citation">${citation}</p>`;
 
               yearBlock.appendChild(article);
             });
