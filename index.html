@@ -275,7 +275,7 @@
         if (!str) return "";
 
         return str
-          // í: {\'\i} or \'\i or {\'i} or \'i
+          // í variants: {\'\i}, \'\i, {\'i}, \'i
           .replace(/\{\\'\\i\}/g, "í")
           .replace(/\\'\\i/g, "í")
           .replace(/\{\\'i\}/g, "í")
@@ -324,7 +324,9 @@
             groups[year].push(e);
           });
 
-          const years = Object.keys(groups).sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0));
+          const years = Object.keys(groups).sort(
+            (a, b) => (parseInt(b) || 0) - (parseInt(a) || 0)
+          );
 
           const container = document.getElementById("pubs");
           container.innerHTML = "";
@@ -356,21 +358,21 @@
 
               const volume = t.volume ? ` ${decodeLatex(t.volume)}` : "";
               const number = t.number ? `(${decodeLatex(t.number)})` : "";
-              const pages = t.pages ? `, ${decodeLateax(t.pages)}` : "";
+              const pages = t.pages ? `, ${decodeLatex(t.pages)}` : "";
 
               const venue = journal ? `<em>${journal}</em>` : publisher;
 
-              const citationHtml = `
-                <article class="pub-item">
-                  <p class="pub-citation">
-                    ${authors}. ${year !== "Preprints" ? `(${year}).` : "(Preprint)."}
-                    ${title}.
-                    ${venue}${volume}${number}${pages}
-                  </p>
-                </article>
+              const article = document.createElement("article");
+              article.className = "pub-item";
+              article.innerHTML = `
+                <p class="pub-citation">
+                  ${authors}. ${year !== "Preprints" ? `(${year}).` : "(Preprint)."}
+                  ${title}.
+                  ${venue}${volume}${number}${pages}
+                </p>
               `;
 
-              yearBlock.innerHTML += citationHtml;
+              yearBlock.appendChild(article);
             });
 
             container.appendChild(yearBlock);
@@ -378,7 +380,8 @@
 
         } catch (err) {
           console.error(err);
-          document.getElementById("pubs").innerHTML = "Unable to load publications at this time.";
+          document.getElementById("pubs").innerHTML =
+            "Unable to load publications at this time.";
         }
       }
 
