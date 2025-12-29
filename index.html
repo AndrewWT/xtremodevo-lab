@@ -269,43 +269,143 @@
     <!-- BibTeX parser -->
     <script src="https://unpkg.com/bibtex-parse-js@0.0.24/bibtexParse.js"></script>
 
-    <!-- Publications rendering -->
+    <!-- Publications rendering (APA style) -->
     <script>
       function decodeLatex(str) {
         if (!str) return "";
 
         return str
-          // í variants: {\'\i}, \'\i, {\'i}, \'i
+          // í variants
           .replace(/\{\\'\\i\}/g, "í")
           .replace(/\\'\\i/g, "í")
           .replace(/\{\\'i\}/g, "í")
           .replace(/\\'i/g, "í")
-
           // é
           .replace(/\{\\'e\}/g, "é")
           .replace(/\\'e/g, "é")
-
           // á
           .replace(/\{\\'a\}/g, "á")
           .replace(/\\'a/g, "á")
-
           // ó
           .replace(/\{\\'o\}/g, "ó")
           .replace(/\\'o/g, "ó")
-
           // ú
           .replace(/\{\\'u\}/g, "ú")
           .replace(/\\'u/g, "ú")
-
           // Å
           .replace(/\{\\AA\}/g, "Å")
-
           // ampersand and dashes
           .replace(/\\&/g, "&")
           .replace(/--/g, "–")
-
           // strip remaining braces
           .replace(/[{}]/g, "");
+      }
+
+      function formatAuthorAPA(author) {
+        author = author.trim();
+        if (!author) return "";
+
+        // If "Last, First Middle" form
+        if (author.includes(",")) {
+          const parts = author.split(",");
+          const last = parts[0].trim();
+          const given = (parts[1] || "").trim();
+          if (!given) return last;
+
+          const givenPieces = given.split(/\s+/).filter(Boolean);
+          const initials = givenPieces.map(n => n[0].toUpperCase() + ".").join(" ");
+
+          return `${last}, ${initials}`;
+        }
+
+        // Else assume "First Middle Last"
+        const bits = author.split(/\s+/).filter(Boolean);
+        if (bits.length === 1) {
+          return bits[0];
+        }
+        const last = bits[bits.length - 1];
+        const given = bits.slice(0, -1);
+        const initials = given.map(n => n[0].toUpperCase() + ".").join(" ");
+        return `${last}, ${initials}`;
+      }
+
+      function formatAuthorsAPA(rawAuthors) {
+        if (!rawAuthors) return "";
+        const decoded = decodeLatex(rawAuthors);
+        const list = decoded.split(/\s+and\s+/).map(a => a.trim()).filter(Boolean);
+
+        const formatted = list.map(formatAuthorAPA);
+
+        // APA 7: up to 20 authors fully listed; if > 20, show first 19, …, last
+        if (formatted.length > 20) {
+          const first19 = formatted.slice(0, 19);
+          const last = formatted[formatted.length - 1];
+          const short = [...first19, "…", last];
+          return short.slice(0, -1).join(", ") + ", & " + short[short.length - 1];
+        }
+
+        if (formatted.length === 1) return formatted[0];
+        if (formatted.length === 2) return `${formatted[0]} & ${formatted[1]}`;
+
+        return formatted.slice(0, -1).join(", ") + ", & " + formatted[formatted.length - 1];
+      }
+
+      function buildCitationAPA(entry) {
+        const t = entry.entryTags || {};
+        const year = t.year || "n.d.";
+        const rawAuthors = t.author || "";
+        const authorsAPA = formatAuthorsAPA(rawAuthors);
+
+        let title = decodeLatex(t.title || "").trim();
+        if (title.endsWith(".")) title = title.slice(0, -1);
+
+        const entryType = (entry.entryType || "").toLowerCase();
+
+        // Basic fields
+        let journal = decodeLatex(t.journal || t.booktitle || "").trim();
+        let publisher = decodeLatex(t.publisher || "").trim();
+        const volume = t.volume ? decodeLatex(t.volume).trim() : "";
+        const number = t.number ? decodeLatex(t.number).trim() : "";
+        const pages = t.pages ? decodeLatex(t.pages).trim() : "";
+        const school = t.school ? decodeLatex(t.school).trim() : "";
+
+        let main = "";
+
+        if (entryType === "phdthesis") {
+          // Doctoral dissertation
+          const inst = school || publisher;
+          main = `${authorsAPA} (${year}). <em>${title}</em> (Doctoral dissertation). ${inst}.`;
+        } else if (journal) {
+          // Journal / preprint with "journal" field
+          let volIssue = "";
+          if (volume) {
+            volIssue += `<em>${volume}</em>`;
+            if (number) {
+              volIssue += `(${number})`;
+            }
+          }
+          let pagePart = pages ? `, ${pages}` : "";
+
+          main = `${authorsAPA} (${year}). ${title}. <em>${journal}</em>`;
+          if (volIssue || pagePart) {
+            main += `, ${volIssue}${pagePart}`;
+          }
+          main += ".";
+        } else if (publisher) {
+          // Book-ish / report-ish
+          main = `${authorsAPA} (${year}). <em>${title}</em>. ${publisher}.`;
+        } else {
+          // Fallback
+          main = `${authorsAPA} (${year}). ${title}.`;
+        }
+
+        // Highlight YOUR name
+        main = main
+          .replace(/Thompson,\s*Andrew\s+W\b/g, "<strong><u>Thompson, Andrew W</u></strong>")
+          .replace(/Andrew\s+W\s+Thompson\b/g, "<strong><u>Andrew W Thompson</u></strong>")
+          .replace(/Thompson,\s*A\.?\s*W\.?\b/g, "<strong><u>Thompson, A. W.</u></strong>");
+
+        return main;
       }
 
       async function loadBib() {
@@ -337,39 +437,10 @@
             yearBlock.innerHTML = `<h3 class="pub-year-heading">${year}</h3>`;
 
             groups[year].forEach(e => {
-              const t = e.entryTags || {};
-
-              // decode and normalize authors (comma-separated, no trailing . or ,)
-              const rawAuthors = decodeLatex(t.author || "");
-              let authors = rawAuthors.split(/\s+and\s+/).join(", ");
-              authors = authors.trim().replace(/[.,]\s*$/, "");
-
-              // decode and clean title / venue
-              let title = decodeLatex(t.title || "");
-              title = title.trim().replace(/[.]\s*$/, "");
-
-              let venue = decodeLatex(t.journal || t.booktitle || t.publisher || "");
-              venue = venue.trim().replace(/[.]\s*$/, "");
-
-              const volume = t.volume ? ` ${decodeLatex(t.volume).trim()}` : "";
-              const number = t.number ? `(${decodeLatex(t.number).trim()})` : "";
-              const pages = t.pages ? `, ${decodeLatex(t.pages).trim()}` : "";
-
-              const yearLabel = year !== "Preprints" ? `(${year}).` : "(Preprint).";
-
-              // build plain-text citation first
-              let citation = `${authors}. ${yearLabel} ${title}. ${venue}${volume}${number}${pages}`;
-
-              // now bold+underline YOUR name in the final string
-              citation = citation
-                .replace(/Thompson, Andrew W/g, "<strong><u>Thompson, Andrew W</u></strong>")
-                .replace(/Andrew W Thompson/g, "<strong><u>Andrew W Thompson</u></strong>")
-                .replace(/Thompson, A\. W\./g, "<strong><u>Thompson, A. W.</u></strong>");
-
+              const citation = buildCitationAPA(e);
               const article = document.createElement("article");
               article.className = "pub-item";
               article.innerHTML = `<p class="pub-citation">${citation}</p>`;
-
               yearBlock.appendChild(article);
             });
 
