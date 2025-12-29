@@ -266,20 +266,45 @@
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>
 
+    <!-- BibTeX parser -->
     <script src="https://unpkg.com/bibtex-parse-js@0.0.24/bibtexParse.js"></script>
 
+    <!-- Publications rendering -->
     <script>
       function decodeLatex(str) {
         if (!str) return "";
+
         return str
+          // í: {\'\i} or \'\i or {\'i} or \'i
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\\'\\i/g, "í")
           .replace(/\{\\'i\}/g, "í")
+          .replace(/\\'i/g, "í")
+
+          // é
           .replace(/\{\\'e\}/g, "é")
-          .replace(/\{\\'o\}/g, "ó")
-          .replace(/\{\\'u\}/g, "ú")
+          .replace(/\\'e/g, "é")
+
+          // á
           .replace(/\{\\'a\}/g, "á")
+          .replace(/\\'a/g, "á")
+
+          // ó
+          .replace(/\{\\'o\}/g, "ó")
+          .replace(/\\'o/g, "ó")
+
+          // ú
+          .replace(/\{\\'u\}/g, "ú")
+          .replace(/\\'u/g, "ú")
+
+          // Å
           .replace(/\{\\AA\}/g, "Å")
+
+          // ampersand and dashes
           .replace(/\\&/g, "&")
           .replace(/--/g, "–")
+
+          // strip remaining braces
           .replace(/[{}]/g, "");
       }
 
@@ -288,54 +313,71 @@
           const res = await fetch("publications.bib");
           if (!res.ok) throw new Error("publications.bib not found");
 
-          const entries = bibtexParse.toJSON(await res.text());
+          const text = await res.text();
+          const entries = bibtexParse.toJSON(text);
 
+          // group by year (fallback "Preprints")
           const groups = {};
           entries.forEach(e => {
-            const y = e.entryTags?.year || "Preprints";
-            if (!groups[y]) groups[y] = [];
-            groups[y].push(e);
+            const year = e.entryTags?.year || "Preprints";
+            if (!groups[year]) groups[year] = [];
+            groups[year].push(e);
           });
 
-          const years = Object.keys(groups).sort((a,b) => (parseInt(b)||0)-(parseInt(a)||0));
+          const years = Object.keys(groups).sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0));
 
           const container = document.getElementById("pubs");
           container.innerHTML = "";
 
           years.forEach(year => {
-            const block = document.createElement("div");
-            block.innerHTML = `<h3 class="pub-year-heading">${year}</h3>`;
-            
+            const yearBlock = document.createElement("div");
+            yearBlock.className = "pub-year-block";
+            yearBlock.innerHTML = `<h3 class="pub-year-heading">${year}</h3>`;
+
             groups[year].forEach(e => {
               const t = e.entryTags || {};
-              
+
+              // decode and normalize authors
               const rawAuthors = decodeLatex(t.author || "");
-              const authors = rawAuthors.split(/\s+and\s+/).join(", ")
+              let authors = rawAuthors.split(/\s+and\s+/).join(", ");
+
+              // bold + underline your name in various forms
+              authors = authors
                 .replace(/Andrew W\. Thompson/g, "<strong><u>Andrew W. Thompson</u></strong>")
+                .replace(/Andrew W Thompson/g, "<strong><u>Andrew W Thompson</u></strong>")
                 .replace(/Thompson, Andrew W\./g, "<strong><u>Thompson, Andrew W.</u></strong>")
-                .replace(/Thompson, A\. W\./g, "<strong><u>Thompson, A. W.</u></strong>");
+                .replace(/Thompson, Andrew W/g, "<strong><u>Thompson, Andrew W</u></strong>")
+                .replace(/Thompson, A\. W\./g, "<strong><u>Thompson, A. W.</u></strong>")
+                .replace(/Thompson, A W/g, "<strong><u>Thompson, A W</u></strong>");
 
               const title = decodeLatex(t.title || "");
               const journal = decodeLatex(t.journal || t.booktitle || "");
               const publisher = decodeLatex(t.publisher || "");
 
-              const volume = t.volume ? ` ${t.volume}` : "";
-              const number = t.number ? `(${t.number})` : "";
-              const pages = t.pages ? `, ${decodeLatex(t.pages)}` : "";
+              const volume = t.volume ? ` ${decodeLatex(t.volume)}` : "";
+              const number = t.number ? `(${decodeLatex(t.number)})` : "";
+              const pages = t.pages ? `, ${decodeLateax(t.pages)}` : "";
 
-              block.innerHTML += `
+              const venue = journal ? `<em>${journal}</em>` : publisher;
+
+              const citationHtml = `
                 <article class="pub-item">
                   <p class="pub-citation">
-                    ${authors}. (${year}). ${title}.
-                    ${journal ? `<em>${journal}</em>` : publisher}${volume}${number}${pages}
+                    ${authors}. ${year !== "Preprints" ? `(${year}).` : "(Preprint)."}
+                    ${title}.
+                    ${venue}${volume}${number}${pages}
                   </p>
-                </article>`;
+                </article>
+              `;
+
+              yearBlock.innerHTML += citationHtml;
             });
 
-            container.appendChild(block);
+            container.appendChild(yearBlock);
           });
 
-        } catch {
+        } catch (err) {
+          console.error(err);
           document.getElementById("pubs").innerHTML = "Unable to load publications at this time.";
         }
       }
