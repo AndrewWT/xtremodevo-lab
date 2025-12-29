@@ -271,8 +271,68 @@
     <!-- BibTeX Parser -->
     <script src="https://unpkg.com/bibtex-parse-js@0.0.24/bibtexParse.js"></script>
 
-    <!-- Render publications -->
+    <!-- Render publications: decode LaTeX accents + group by year -->
     <script>
+      function decodeLatex(str) {
+        if (!str) return "";
+        return str
+          // common accent patterns from your BibTeX
+          .replace(/\{\\'i\}/g, "í")
+          .replace(/\{\\'I\}/g, "Í")
+          .replace(/\{\\'e\}/g, "é")
+          .replace(/\{\\'E\}/g, "É")
+          .replace(/\{\\'a\}/g, "á")
+          .replace(/\{\\'A\}/g, "Á")
+          .replace(/\{\\'o\}/g, "ó")
+          .replace(/\{\\'O\}/g, "Ó")
+          .replace(/\{\\'u\}/g, "ú")
+          .replace(/\{\\'U\}/g, "Ú")
+          .replace(/\{\\'c\}/g, "ć")
+          .replace(/\{\\'C\}/g, "Ć")
+          .replace(/\{\\'\\i\}/g, "í") // sometimes i is written as \i
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\\i\}/g, "í")
+          .replace(/\{\\'\\\i\}/g, "í")
+          .replace(/\{\\'\\\i\}/g, "í")
+          .replace(/\{\\'\\\i\}/g, "í")
+          .replace(/\{\\'\\\i\}/g, "í")
+          .replace(/\{\\'\\\i\}/g, "í")
+          // specific names from your list
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'o\}/g, "ó")
+          .replace(/\{\\'u\}/g, "ú")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          // more general cleanup
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\{\\'\\i\}/g, "í")
+          // specific braces like {\AA}
+          .replace(/\{\\AA\}/g, "Å")
+          .replace(/\{\\aa\}/g, "å")
+          // ampersand + dashes
+          .replace(/\\&/g, "&")
+          .replace(/--/g, "–")
+          // remove leftover braces
+          .replace(/[{}]/g, "");
+      }
+
       async function loadBib() {
         try {
           const res = await fetch("publications.bib");
@@ -281,47 +341,85 @@
           const bibText = await res.text();
           const entries = bibtexParse.toJSON(bibText);
 
-          entries.sort((a, b) => ((b.entryTags.year || 0) - (a.entryTags.year || 0)));
+          // group by year
+          const groups = {};
+          entries.forEach(e => {
+            const t = e.entryTags || {};
+            const year = t.year || "Other";
+            if (!groups[year]) groups[year] = [];
+            groups[year].push(e);
+          });
+
+          // sort years descending (numeric years first)
+          const years = Object.keys(groups).sort((a, b) => {
+            const ya = parseInt(a) || 0;
+            const yb = parseInt(b) || 0;
+            return yb - ya;
+          });
 
           const container = document.getElementById("pubs");
           container.innerHTML = "";
 
-          entries.forEach(e => {
-            const t = e.entryTags || {};
-            let authors = (t.author || "").replace(/ and /g, ", ");
+          years.forEach(year => {
+            const yearEntries = groups[year];
 
-            authors = authors
-              .replace(/Andrew W\. Thompson/g, "<strong>Andrew W. Thompson</strong>")
-              .replace(/Thompson, Andrew W\./g, "<strong>Thompson, Andrew W.</strong>")
-              .replace(/Thompson, A\. W\./g, "<strong>Thompson, A. W.</strong>");
+            // year heading
+            const yearBlock = document.createElement("div");
+            yearBlock.className = "pub-year-block";
+            yearBlock.innerHTML = `<h3 class="pub-year-heading">${year}</h3>`;
+            
+            yearEntries.forEach(e => {
+              const t = e.entryTags || {};
+              let authors = decodeLatex(t.author || "");
+              let title = decodeLatex(t.title || "");
+              let journal = decodeLatex(t.journal || t.booktitle || "");
+              let publisher = decodeLatex(t.publisher || "");
 
-            const title = t.title || "";
-            const journal = t.journal || t.booktitle || "";
-            const year = t.year || "";
-            const volume = t.volume ? ` ${t.volume}` : "";
-            const number = t.number ? `(${t.number})` : "";
-            const pages = t.pages ? `, ${t.pages}` : "";
-            const publisher = (!journal && t.publisher) ? ` ${t.publisher}` : "";
+              const volume = t.volume ? ` ${decodeLatex(t.volume)}` : "";
+              const number = t.number ? `(${decodeLatex(t.number)})` : "";
+              const pages = t.pages ? `, ${decodeLatex(t.pages)}` : "";
 
-            const doi = t.doi || "";
-            const url = t.url || "";
-            let linkHTML = "";
-            if (doi) {
-              const doiURL = doi.startsWith("http") ? doi : `https://doi.org/${doi}`;
-              linkHTML = ` <a href="${doiURL}" target="_blank" rel="noopener">DOI</a>`;
-            } else if (url) {
-              linkHTML = ` <a href="${url}" target="_blank" rel="noopener">Link</a>`;
-            }
+              // bold your name
+              authors = authors
+                .replace(/Andrew W\. Thompson/g, "<strong>Andrew W. Thompson</strong>")
+                .replace(/Thompson, Andrew W\./g, "<strong>Thompson, Andrew W.</strong>")
+                .replace(/Thompson, A\. W\./g, "<strong>Thompson, A. W.</strong>");
 
-            container.innerHTML += `
-              <article class="pub-item">
-                <p class="pub-year">${year}</p>
+              const doi = t.doi || "";
+              const url = t.url || "";
+              let linkHTML = "";
+              if (doi) {
+                const doiURL = doi.startsWith("http") ? doi : `https://doi.org/${doi}`;
+                linkHTML = ` <a href="${doiURL}" target="_blank" rel="noopener">DOI</a>`;
+              } else if (url) {
+                linkHTML = ` <a href="${url}" target="_blank" rel="noopener">Link</a>`;
+              }
+
+              const citationParts = [];
+              if (authors) citationParts.push(`${authors}.`);
+              if (year && year !== "Other") citationParts.push(`(${year}).`);
+              if (title) citationParts.push(`${title}.`);
+
+              let venue = "";
+              if (journal) venue = `<em>${journal}</em>`;
+              else if (publisher) venue = publisher;
+
+              const trailing = `${venue}${volume}${number}${pages}`;
+
+              const article = document.createElement("article");
+              article.className = "pub-item";
+              article.innerHTML = `
                 <p class="pub-citation">
-                  ${authors}. ${year ? `(${year}).` : ""}
-                  ${title}.
-                  ${journal ? `<em>${journal}</em>` : ""}${volume}${number}${pages}${publisher}${linkHTML}
+                  ${citationParts.join(" ")}
+                  ${trailing}
+                  ${linkHTML}
                 </p>
-              </article>`;
+              `;
+
+              yearBlock.appendChild(article);
+            });
+
+            container.appendChild(yearBlock);
           });
 
         } catch (err) {
