@@ -107,7 +107,7 @@
           <p class="person-role">Principal Investigator</p>
           <p>
             Drew is the PI of the Xtremo-Devo Lab, focusing on how development evolves in response to extreme
-            environments, with an the killifish model system.
+            environments, with the killifish model system.
           </p>
           <p class="person-contact">
             <a href="mailto:Andrew.Thompson@wmich.edu">Andrew.Thompson@wmich.edu</a>
@@ -143,7 +143,6 @@
         A selection of recent work. For a full list, see CV or Google Scholar.
       </p>
 
-      <!-- This will be filled automatically from publications.bib -->
       <div class="pub-list" id="pubs">
         Loading publications…
       </div>
@@ -264,39 +263,39 @@
       <p>&copy; <span id="year"></span> Xtremo-Devo Lab. All rights reserved.</p>
     </div>
 
-    <!-- Keep your existing year script -->
+    <!-- Auto year -->
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>
 
-    <!-- BibTeX parsing + rendering -->
-    <script src="https://unpkg.com/bibtex-parse-js@1.0.12/lib/bibtex-parse.js"></script>
+    <!-- BibTeX Parser -->
+    <script src="https://unpkg.com/bibtex-parse-js@0.0.24/bibtexParse.js"></script>
+
+    <!-- Render publications -->
     <script>
       async function loadBib() {
         try {
           const res = await fetch("publications.bib");
-          if (!res.ok) {
-            throw new Error("Could not load publications.bib");
-          }
+          if (!res.ok) throw new Error("publications.bib not found");
+
           const bibText = await res.text();
           const entries = bibtexParse.toJSON(bibText);
 
-          // sort newest → oldest by year (non-numeric years go last)
-          entries.sort((a, b) => {
-            const ya = parseInt(a.entryTags.year) || 0;
-            const yb = parseInt(b.entryTags.year) || 0;
-            return yb - ya;
-          });
+          entries.sort((a, b) => ((b.entryTags.year || 0) - (a.entryTags.year || 0)));
 
           const container = document.getElementById("pubs");
           container.innerHTML = "";
 
           entries.forEach(e => {
             const t = e.entryTags || {};
-
-            // Basic pieces
             let authors = (t.author || "").replace(/ and /g, ", ");
-            const title = t.title || "Untitled";
+
+            authors = authors
+              .replace(/Andrew W\. Thompson/g, "<strong>Andrew W. Thompson</strong>")
+              .replace(/Thompson, Andrew W\./g, "<strong>Thompson, Andrew W.</strong>")
+              .replace(/Thompson, A\. W\./g, "<strong>Thompson, A. W.</strong>");
+
+            const title = t.title || "";
             const journal = t.journal || t.booktitle || "";
             const year = t.year || "";
             const volume = t.volume ? ` ${t.volume}` : "";
@@ -304,38 +303,29 @@
             const pages = t.pages ? `, ${t.pages}` : "";
             const publisher = (!journal && t.publisher) ? ` ${t.publisher}` : "";
 
-            // Make your name bold when it appears
-            authors = authors.replace(/Andrew W\. Thompson/g, "<strong>Andrew W. Thompson</strong>")
-                             .replace(/Thompson, Andrew W\./g, "<strong>Thompson, Andrew W.</strong>")
-                             .replace(/Thompson, A\. W\./g, "<strong>Thompson, A. W.</strong>");
-
-            // Optional URL/DOI handling if you add them to the BibTeX later
-            const url = t.url || "";
             const doi = t.doi || "";
+            const url = t.url || "";
             let linkHTML = "";
             if (doi) {
-              const doiUrl = doi.startsWith("http") ? doi : `https://doi.org/${doi}`;
-              linkHTML = ` <a href="${doiUrl}" target="_blank" rel="noopener">DOI</a>`;
+              const doiURL = doi.startsWith("http") ? doi : `https://doi.org/${doi}`;
+              linkHTML = ` <a href="${doiURL}" target="_blank" rel="noopener">DOI</a>`;
             } else if (url) {
               linkHTML = ` <a href="${url}" target="_blank" rel="noopener">Link</a>`;
             }
 
-            const html = `
+            container.innerHTML += `
               <article class="pub-item">
                 <p class="pub-year">${year}</p>
                 <p class="pub-citation">
-                  ${authors}. ${year ? `(${year}).` : ""} 
+                  ${authors}. ${year ? `(${year}).` : ""}
                   ${title}.
                   ${journal ? `<em>${journal}</em>` : ""}${volume}${number}${pages}${publisher}${linkHTML}
                 </p>
-              </article>
-            `;
-
-            container.innerHTML += html;
+              </article>`;
           });
+
         } catch (err) {
-          const container = document.getElementById("pubs");
-          container.innerHTML = "Unable to load publications at this time.";
+          document.getElementById("pubs").innerHTML = "Unable to load publications at this time.";
           console.error(err);
         }
       }
