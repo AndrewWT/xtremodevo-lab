@@ -343,14 +343,14 @@
               const rawAuthors = decodeLatex(t.author || "");
               let authors = rawAuthors.split(/\s+and\s+/).join(", ");
 
-              // bold + underline your name in various forms
+              // === highlight your name (bold + underline) ===
               authors = authors
-                .replace(/Andrew W\. Thompson/g, "<strong><u>Andrew W. Thompson</u></strong>")
-                .replace(/Andrew W Thompson/g, "<strong><u>Andrew W Thompson</u></strong>")
-                .replace(/Thompson, Andrew W\./g, "<strong><u>Thompson, Andrew W.</u></strong>")
-                .replace(/Thompson, Andrew W/g, "<strong><u>Thompson, Andrew W</u></strong>")
-                .replace(/Thompson, A\. W\./g, "<strong><u>Thompson, A. W.</u></strong>")
-                .replace(/Thompson, A W/g, "<strong><u>Thompson, A W</u></strong>");
+                // "Thompson, Andrew W," or "Thompson, Andrew W."
+                .replace(/Thompson, Andrew W(?=[,\.]|$)/g, "<strong><u>Thompson, Andrew W</u></strong>")
+                // "Andrew W Thompson"
+                .replace(/Andrew W Thompson(?=[,\.]|$)/g, "<strong><u>Andrew W Thompson</u></strong>")
+                // "Thompson, A. W." variant
+                .replace(/Thompson, A\. W\.(?=[,]|$)/g, "<strong><u>Thompson, A. W.</u></strong>");
 
               const title = decodeLatex(t.title || "");
               const journal = decodeLatex(t.journal || t.booktitle || "");
