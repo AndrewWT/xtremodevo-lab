@@ -300,6 +300,7 @@ body {
   color: #9ca3af;
   margin-top: 1.5rem;
 }
+
 /* ===== GALLERIES / MODEL ORGANISMS ===== */
 .gallery-grid {
   display: grid;
@@ -387,38 +388,25 @@ body {
   color: #374151;
 }
 
-/* Responsive tweaks for galleries */
-@media (min-width: 768px) {
-  .card-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .hero-grid {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
-  }
-
-  .footer-grid {
-    grid-template-columns: 2fr 1.2fr 1fr;
-  }
-}
-
-@media (min-width: 768px) {
-  /* Make ONLY the Research cards 2 columns */
-  #research .card-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 /* ===== RESPONSIVE ===== */
+
+/* Small screens up */
 @media (min-width: 640px) {
   .join-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
+/* Medium screens up */
 @media (min-width: 768px) {
+  /* Default = 3 columns */
   .card-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* Research ONLY = 2 columns */
+  #research .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .hero-grid {
@@ -428,13 +416,26 @@ body {
   .footer-grid {
     grid-template-columns: 2fr 1.2fr 1fr;
   }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .facility-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: flex-start;
+  }
+
+  .facility-gallery {
+    grid-template-columns: 1fr;
+  }
 }
 
+/* Mobile tweaks */
 @media (max-width: 767px) {
   .nav-container {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
   }
 
   .nav {
