@@ -7,29 +7,27 @@
   padding: 0;
 }
 
-/* Rio Pearlfish theme variables */
+/* Rio Pearlfish theme variables (pulled from image) */
 :root {
-  /* Rio Pearlfish palette */
-  --rio-deep: #201024;       /* deep maroon/eggplant body */
-  --rio-body: #8b3c3a;       /* reddish-brown body */
-  --rio-spot: #2fd4c9;       /* turquoise spots */
-  --rio-fin-gold: #f5b44c;   /* golden fins */
-  --rio-fin-orange: #f07a3f; /* orange fin edge */
+  --rio-deep: #311a08;        /* deep chocolate / dorsal */
+  --rio-body: #a65a30;        /* rusty body tone */
+  --rio-gold: #cfa447;        /* warm gold fins */
+  --rio-pearl: #f3ead7;       /* pearl cream spots */
+  --rio-shadow: #7a5127;
 
   /* Neutrals */
-  --bg: #f4f6f9;
+  --bg: #f6f4ef;
   --panel: #ffffff;
-  --text-dark: #111019;
+  --text-dark: #171311;
   --text-muted: #4b5563;
 
-  /* Utility “brand” colors mapped to fish palette */
+  /* Utility brand mapping */
   --brand-dark: var(--rio-deep);
   --brand: var(--rio-body);
-  --brand-light: #f3e4e4; /* soft body tint */
-  --accent: var(--rio-spot);
-  --accent-warm: var(--rio-fin-gold);
+  --accent: var(--rio-gold);
 }
 
+/* Body */
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.6;
@@ -97,8 +95,8 @@ body {
 .hero {
   padding: 4rem 0 3rem;
   background:
-    radial-gradient(circle at top left, rgba(47, 212, 201, 0.18), transparent 55%),
-    radial-gradient(circle at bottom right, rgba(240, 122, 63, 0.16), transparent 55%),
+    radial-gradient(circle at top left, rgba(240, 215, 150, 0.15), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(196, 138, 64, 0.18), transparent 55%),
     var(--bg);
 }
 
@@ -172,11 +170,11 @@ body {
 .btn.secondary {
   background: transparent;
   color: var(--accent);
-  border-color: rgba(47, 212, 201, 0.4);
+  border-color: rgba(207, 164, 71, 0.45);
 }
 
 .btn.secondary:hover {
-  background: rgba(47, 212, 201, 0.12);
+  background: rgba(207, 164, 71, 0.12);
 }
 
 /* ===== GENERIC SECTIONS ===== */
@@ -185,7 +183,7 @@ body {
 }
 
 .section-alt {
-  background: #e7eef3;
+  background: #ebe6dc;
 }
 
 .section h2 {
@@ -209,7 +207,7 @@ body {
   background: var(--panel);
   border-radius: 1rem;
   padding: 1.4rem 1.5rem;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 4px 10px rgba(49, 26, 8, 0.12);
 }
 
 .card h3 {
@@ -327,7 +325,7 @@ body {
   margin-top: 1.5rem;
 }
 
-/* ===== GALLERIES / MODEL ORGANISMS ===== */
+/* ===== GALLERIES ===== */
 .gallery-grid {
   display: grid;
   gap: 1.5rem;
@@ -337,8 +335,8 @@ body {
   background: var(--panel);
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(32, 16, 36, 0.12);
-  border: 1px solid rgba(32, 16, 36, 0.06);
+  box-shadow: 0 4px 14px rgba(49, 26, 8, 0.14);
+  border: 1px solid rgba(49, 26, 8, 0.07);
   display: flex;
   flex-direction: column;
 }
@@ -364,7 +362,7 @@ body {
   color: #4b5563;
 }
 
-/* ===== FACILITY LAYOUT ===== */
+/* ===== FACILITY ===== */
 .facility-grid {
   display: grid;
   gap: 1.75rem;
@@ -379,7 +377,7 @@ body {
   background: var(--panel);
   border-radius: 0.9rem;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(32, 16, 36, 0.12);
+  box-shadow: 0 4px 14px rgba(49, 26, 8, 0.12);
 }
 
 .facility-photo img {
@@ -392,47 +390,21 @@ body {
   padding: 0.7rem 0.9rem 0.9rem;
   font-size: 0.85rem;
   color: #4b5563;
-  border-top: 2px solid rgba(245, 180, 76, 0.4); /* fin gold accent */
-}
-
-.facility-details h3 {
-  margin-bottom: 0.6rem;
-}
-
-.facility-list {
-  list-style: disc;
-  padding-left: 1.2rem;
-  margin-bottom: 0.9rem;
-  color: #4b5563;
-  font-size: 0.9rem;
-}
-
-.facility-list li + li {
-  margin-top: 0.25rem;
-}
-
-.facility-note {
-  font-size: 0.9rem;
-  color: #374151;
+  border-top: 2px solid rgba(207, 164, 71, 0.45);
 }
 
 /* ===== RESPONSIVE ===== */
-
-/* Small screens up */
 @media (min-width: 640px) {
   .join-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-/* Medium screens up */
 @media (min-width: 768px) {
-  /* Default = 3 columns */
   .card-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  /* Research ONLY = 2 columns so those long blurbs breathe */
   #research .card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -453,13 +425,8 @@ body {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     align-items: flex-start;
   }
-
-  .facility-gallery {
-    grid-template-columns: 1fr;
-  }
 }
 
-/* Mobile tweaks */
 @media (max-width: 767px) {
   .nav-container {
     flex-direction: column;
