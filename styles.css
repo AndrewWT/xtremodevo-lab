@@ -389,11 +389,8 @@ body {
 
 /* Responsive tweaks for galleries */
 @media (min-width: 768px) {
-  /* Let card grids size themselves nicely:
-     1–3 columns depending on width, so Research (2 cards)
-     won’t be tall and skinny */
   .card-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .hero-grid {
@@ -405,6 +402,12 @@ body {
   }
 }
 
+@media (min-width: 768px) {
+  /* Make ONLY the Research cards 2 columns */
+  #research .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 
 /* ===== RESPONSIVE ===== */
 @media (min-width: 640px) {
