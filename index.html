@@ -521,11 +521,14 @@
           const entries = bibtexParse.toJSON(text);
 
           const groups = {};
-          entries.forEach(e => {
-            const year = e.entryTags?.year || "Preprints";
-            if (!groups[year]) groups[year] = [];
-            groups[year].push(e);
-          });
+        entries.forEach(e => {
+  const year = e.entryTags?.year;
+
+  if (!year) return;  // skip entries with no year
+
+  if (!groups[year]) groups[year] = [];
+  groups[year].push(e);
+});
 
           const years = Object.keys(groups).sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0));
 
