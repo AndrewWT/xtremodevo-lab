@@ -154,8 +154,6 @@ body {
 
 .hero-logo-panel {
 
-  position: relative;
-
   flex-shrink: 0;
 
   padding: 1.4rem 1.6rem;
@@ -172,35 +170,6 @@ body {
   box-shadow:
     0 12px 35px rgba(0,0,0,0.28),
     0 0 0 2px rgba(47,186,196,0.18);
-
-  overflow: visible;
-
-}
-
-/* glowing halo behind logo */
-
-.hero-logo-panel::before {
-
-  content: "";
-
-  position: absolute;
-
-  inset: -35px;
-
-  border-radius: 50%;
-
-  background: radial-gradient(
-      circle,
-      rgba(47,186,196,0.45),
-      rgba(47,186,196,0.18),
-      transparent 70%
-  );
-
-  filter: blur(35px);
-
-  z-index: -1;
-
-  animation: pearlGlow 7s ease-in-out infinite;
 
 }
 
@@ -353,24 +322,6 @@ body {
 
   .hero-logo {
     width: 190px;
-  }
-
-}
-@keyframes pearlGlow {
-
-  0% {
-    opacity: 0.35;
-    transform: scale(0.95);
-  }
-
-  50% {
-    opacity: 0.65;
-    transform: scale(1.05);
-  }
-
-  100% {
-    opacity: 0.35;
-    transform: scale(0.95);
   }
 
 }
