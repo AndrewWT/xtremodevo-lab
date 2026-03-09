@@ -418,12 +418,6 @@ body {
   gap: 1rem;
 }
 
-.facility-photo {
-  background: var(--panel);
-  border-radius: 0.9rem;
-  overflow: hidden;
-  box-shadow: 0 4px 14px rgba(47, 36, 21, 0.14);
-}
 
 .facility-photo img {
   width: 100%;
