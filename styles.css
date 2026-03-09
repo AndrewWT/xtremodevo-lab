@@ -365,6 +365,21 @@ body {
   color: var(--accent);
 }
 
+/* New styles for grouped publications */
+
+.pub-year-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pub-year-heading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-top: 1rem;
+}
+
 /* =========================================
    GALLERIES
 ========================================= */
