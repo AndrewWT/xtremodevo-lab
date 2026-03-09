@@ -80,18 +80,20 @@ body {
 
 .logo {
   display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.logo-text {
+  display: flex;
   flex-direction: column;
 }
 
-.logo-main {
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  font-size: 1.05rem;
-}
-
-.logo-sub {
-  font-size: 0.8rem;
-  opacity: 0.8;
+.site-logo {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
 }
 
 .nav {
