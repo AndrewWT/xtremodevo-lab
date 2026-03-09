@@ -23,7 +23,6 @@
           alt="Xtremo-Devo Lab logo"
           class="site-logo"
         />
-
         <div class="logo-text">
           <span class="logo-main">Xtremo-Devo Lab</span>
           <span class="logo-sub">Andrew Thompson</span>
@@ -45,42 +44,42 @@
     </div>
   </header>
 
-<!-- ===== HERO VIDEO ===== -->
-<section id="hero" class="hero-video">
+  <!-- ===== HERO VIDEO ===== -->
+  <section id="hero" class="hero-video">
 
-  <video autoplay muted loop playsinline class="hero-bg-video">
-    <source src="videos/killifish-banner.mp4" type="video/mp4" />
-  </video>
+    <video autoplay muted loop playsinline class="hero-bg-video">
+      <source src="videos/killifish-banner.mp4" type="video/mp4" />
+    </video>
 
-  <div class="hero-overlay"></div>
+    <div class="hero-overlay"></div>
 
-  <div class="container hero-flex">
+    <div class="container hero-flex">
 
-    <div class="hero-logo-panel">
-      <img
-        src="images/xtremodevo-logo.png"
-        class="hero-logo"
-        alt="Xtremo-Devo Lab Logo"
-      />
-    </div>
-
-    <div class="hero-text">
-      <h1>Development &amp; evolution in extreme environments.</h1>
-
-      <p class="hero-subtitle">
-        We use killifishes to uncover how organisms survive,
-        develop, and evolve under extreme ecological challenges.
-      </p>
-
-      <div class="hero-actions">
-        <a href="#research" class="btn primary">Explore our research</a>
-        <a href="#join" class="btn secondary">Join the lab</a>
+      <div class="hero-logo-panel">
+        <img
+          src="images/xtremodevo-logo.png"
+          class="hero-logo"
+          alt="Xtremo-Devo Lab Logo"
+        />
       </div>
+
+      <div class="hero-text">
+        <h1>Development &amp; evolution in extreme environments.</h1>
+
+        <p class="hero-subtitle">
+          We use killifishes to uncover how organisms survive,
+          develop, and evolve under extreme ecological challenges.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#research" class="btn primary">Explore our research</a>
+          <a href="#join" class="btn secondary">Join the lab</a>
+        </div>
+      </div>
+
     </div>
+  </section>
 
-  </div>
-
-</section>
   <!-- ===== RESEARCH ===== -->
   <section id="research" class="section">
     <div class="container">
@@ -101,7 +100,7 @@
             Killifishes are emerging research models for evolution, development,
             behavior, cancer, developmental perturbations, and aging. Annual
             killifishes have dormant (diapausing) embryos that withstand seasonal
-            habitat desiccation which results in death of the entire parental
+            habitat desiccation, which results in death of the entire parental
             population.
           </p>
 
@@ -120,7 +119,7 @@
           <h3>Developmental Genomics of Ancient Fishes</h3>
 
           <p>
-            Many fishes descend from a common ancestor that underwent whole genome
+            Many fishes descend from a common ancestor that underwent whole-genome
             duplication. Slowly evolving “living fossil” fishes like bowfin and
             spotted gar diverged before this duplication.
           </p>
@@ -395,6 +394,167 @@
 
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+
+    <!-- BibTeX parser -->
+    <script src="https://unpkg.com/bibtex-parse-js@0.0.24/bibtexParse.js"></script>
+
+    <!-- Publications loader -->
+    <script>
+      function decodeLatex(str) {
+        if (!str) return "";
+
+        return str
+          .replace(/\{\\'\\i\}/g, "í")
+          .replace(/\\'\\i/g, "í")
+          .replace(/\{\\'i\}/g, "í")
+          .replace(/\\'i/g, "í")
+          .replace(/\{\\'e\}/g, "é")
+          .replace(/\\'e/g, "é")
+          .replace(/\{\\'a\}/g, "á")
+          .replace(/\\'a/g, "á")
+          .replace(/\{\\'o\}/g, "ó")
+          .replace(/\\'o/g, "ó")
+          .replace(/\{\\'u\}/g, "ú")
+          .replace(/\\'u/g, "ú")
+          .replace(/\{\\AA\}/g, "Å")
+          .replace(/\\&/g, "&")
+          .replace(/--/g, "–")
+          .replace(/[{}]/g, "");
+      }
+
+      function formatAuthorAPA(author) {
+        author = author.trim();
+        if (!author) return "";
+
+        if (author.includes(",")) {
+          const parts = author.split(",");
+          const last = parts[0].trim();
+          const given = (parts[1] || "").trim();
+          if (!given) return last;
+
+          const initials = given
+            .split(/\s+/)
+            .filter(Boolean)
+            .map(n => n[0].toUpperCase() + ".")
+            .join(" ");
+
+          return `${last}, ${initials}`;
+        }
+
+        const bits = author.split(/\s+/).filter(Boolean);
+        if (bits.length === 1) return bits[0];
+
+        const last = bits[bits.length - 1];
+        const given = bits.slice(0, -1);
+        const initials = given.map(n => n[0].toUpperCase() + ".").join(" ");
+        return `${last}, ${initials}`;
+      }
+
+      function formatAuthorsAPA(rawAuthors) {
+        if (!rawAuthors) return "";
+        const decoded = decodeLatex(rawAuthors);
+        const list = decoded.split(/\s+and\s+/).map(a => a.trim()).filter(Boolean);
+        const formatted = list.map(formatAuthorAPA);
+
+        if (formatted.length > 20) {
+          const first19 = formatted.slice(0, 19);
+          const last = formatted[formatted.length - 1];
+          return first19.join(", ") + ", …, & " + last;
+        }
+
+        if (formatted.length === 1) return formatted[0];
+        if (formatted.length === 2) return `${formatted[0]} & ${formatted[1]}`;
+        return formatted.slice(0, -1).join(", ") + ", & " + formatted[formatted.length - 1];
+      }
+
+      function buildCitationAPA(entry) {
+        const t = entry.entryTags || {};
+        const year = t.year || "n.d.";
+        const authors = formatAuthorsAPA(t.author || "");
+        let title = decodeLatex(t.title || "").trim();
+        if (title.endsWith(".")) title = title.slice(0, -1);
+
+        const journal = decodeLatex(t.journal || t.booktitle || "").trim();
+        const publisher = decodeLatex(t.publisher || "").trim();
+        const volume = t.volume ? decodeLatex(t.volume).trim() : "";
+        const number = t.number ? decodeLatex(t.number).trim() : "";
+        const pages = t.pages ? decodeLatex(t.pages).trim() : "";
+        const school = t.school ? decodeLatex(t.school).trim() : "";
+        const entryType = (entry.entryType || "").toLowerCase();
+
+        let main = "";
+
+        if (entryType === "phdthesis") {
+          const inst = school || publisher;
+          main = `${authors} (${year}). <em>${title}</em> (Doctoral dissertation). ${inst}.`;
+        } else if (journal) {
+          let volIssue = "";
+          if (volume) {
+            volIssue += `<em>${volume}</em>`;
+            if (number) volIssue += `(${number})`;
+          }
+          const pagePart = pages ? `, ${pages}` : "";
+          main = `${authors} (${year}). ${title}. <em>${journal}</em>`;
+          if (volIssue || pagePart) main += `, ${volIssue}${pagePart}`;
+          main += ".";
+        } else if (publisher) {
+          main = `${authors} (${year}). <em>${title}</em>. ${publisher}.`;
+        } else {
+          main = `${authors} (${year}). ${title}.`;
+        }
+
+        main = main
+          .replace(/Thompson,\s*Andrew\s+W\b/g, "<strong><u>Thompson, Andrew W</u></strong>")
+          .replace(/Andrew\s+W\s+Thompson\b/g, "<strong><u>Andrew W Thompson</u></strong>")
+          .replace(/Thompson,\s*A\.?\s*W\.?\b/g, "<strong><u>Thompson, A. W.</u></strong>");
+
+        return main;
+      }
+
+      async function loadBib() {
+        try {
+          const res = await fetch("publications.bib");
+          if (!res.ok) throw new Error("publications.bib not found");
+
+          const text = await res.text();
+          const entries = bibtexParse.toJSON(text);
+
+          const groups = {};
+          entries.forEach(e => {
+            const year = e.entryTags?.year || "Preprints";
+            if (!groups[year]) groups[year] = [];
+            groups[year].push(e);
+          });
+
+          const years = Object.keys(groups).sort((a, b) => (parseInt(b) || 0) - (parseInt(a) || 0));
+
+          const container = document.getElementById("pubs");
+          container.innerHTML = "";
+
+          years.forEach(year => {
+            const yearBlock = document.createElement("div");
+            yearBlock.className = "pub-year-block";
+            yearBlock.innerHTML = `<h3 class="pub-year-heading">${year}</h3>`;
+
+            groups[year].forEach(e => {
+              const citation = buildCitationAPA(e);
+              const article = document.createElement("article");
+              article.className = "pub-item";
+              article.innerHTML = `<p class="pub-citation">${citation}</p>`;
+              yearBlock.appendChild(article);
+            });
+
+            container.appendChild(yearBlock);
+          });
+        } catch (err) {
+          console.error(err);
+          document.getElementById("pubs").innerHTML =
+            "Unable to load publications at this time.";
+        }
+      }
+
+      loadBib();
     </script>
   </footer>
 
