@@ -466,3 +466,30 @@ body {
     padding-top: 3rem;
   }
 }
+/* VIDEO HERO */
+
+.hero-video {
+  position: relative;
+  overflow: hidden;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero-bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: -2;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: -1;
+}
