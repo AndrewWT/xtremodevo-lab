@@ -334,6 +334,70 @@ body {
   font-size: 0.9rem;
 }
 
+
+/* =========================================
+   PEOPLE SLIDESHOW
+========================================= */
+
+.person-card-with-slideshow {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.person-copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.person-slideshow {
+  margin-top: 0.25rem;
+  border: 1px solid rgba(47, 36, 21, 0.08);
+  box-shadow: none;
+}
+
+.person-slideshow .slideshow-frame {
+  height: 300px;
+  min-height: 240px;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(47, 186, 196, 0.10), transparent 35%),
+    radial-gradient(circle at 80% 75%, rgba(240, 179, 90, 0.12), transparent 35%),
+    #f1eadf;
+}
+
+.person-slideshow .slideshow-frame img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  transform: translate(-50%, -50%);
+}
+
+.person-slideshow .slideshow-caption {
+  min-height: auto;
+}
+
+@media (min-width: 768px) {
+  .people-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .person-card-with-slideshow {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(280px, 1.05fr);
+    align-items: center;
+  }
+
+  .person-slideshow .slideshow-frame {
+    height: 340px;
+  }
+}
+
 /* =========================================
    PUBLICATIONS
 ========================================= */
