@@ -1070,3 +1070,17 @@ body {
 #people .person-slideshow .slideshow-frame {
   border-radius: 1rem;
 }
+
+
+/* =========================================
+   FACILITY PHOTO CARD CLEANUP
+   Keeps image-only facility slideshow clean after redundant caption removal.
+========================================= */
+
+.facility-slideshow {
+  overflow: hidden;
+}
+
+.facility-slideshow .slideshow-frame {
+  border-radius: 0.9rem;
+}
