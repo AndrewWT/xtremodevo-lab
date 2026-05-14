@@ -1084,3 +1084,74 @@ body {
 .facility-slideshow .slideshow-frame {
   border-radius: 0.9rem;
 }
+
+
+/* =========================================
+   RESOURCES / KILLI-KITS
+========================================= */
+
+.resources-grid {
+  align-items: stretch;
+}
+
+.resource-card-with-image {
+  display: grid;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.resource-copy {
+  min-width: 0;
+}
+
+.resource-image-card {
+  margin: 0;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  border: 1px solid rgba(47, 36, 21, 0.08);
+  background:
+    radial-gradient(circle at 25% 20%, rgba(47, 186, 196, 0.10), transparent 35%),
+    radial-gradient(circle at 80% 75%, rgba(240, 179, 90, 0.12), transparent 35%),
+    #f1eadf;
+}
+
+.resource-image-frame {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+}
+
+.resource-image-frame img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  transform: translate(-50%, -50%);
+}
+
+@media (min-width: 900px) {
+  .resources-grid {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+
+  .resource-card-with-image {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.9fr);
+    align-items: center;
+  }
+
+  .resource-image-frame {
+    height: 300px;
+  }
+}
+
+@media (max-width: 767px) {
+  .resource-image-frame {
+    height: 230px;
+  }
+}
