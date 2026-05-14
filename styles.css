@@ -1056,3 +1056,17 @@ body {
     min-height: 220px;
   }
 }
+
+
+/* =========================================
+   PEOPLE PHOTO CARD CLEANUP
+   Removes duplicate caption spacing after people slideshow captions were removed.
+========================================= */
+
+#people .person-slideshow {
+  overflow: hidden;
+}
+
+#people .person-slideshow .slideshow-frame {
+  border-radius: 1rem;
+}
