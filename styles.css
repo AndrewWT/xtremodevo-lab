@@ -420,29 +420,50 @@ body {
   box-shadow: 0 4px 14px rgba(47, 36, 21, 0.16);
 }
 
+.research-card-with-slideshow {
+  display: flex;
+  flex-direction: column;
+}
+
+.research-slideshow {
+  margin-top: 1rem;
+  border: 1px solid rgba(47, 36, 21, 0.08);
+  box-shadow: none;
+}
+
 .slideshow-frame {
   position: relative;
   width: 100%;
-  height: 360px;
-  min-height: 280px;
+  height: 340px;
+  min-height: 260px;
   overflow: hidden;
-  background: var(--rio-deep);
+  background:
+    radial-gradient(circle at 25% 20%, rgba(47, 186, 196, 0.15), transparent 35%),
+    radial-gradient(circle at 80% 75%, rgba(240, 179, 90, 0.13), transparent 35%),
+    var(--rio-deep);
+}
+
+.research-slideshow .slideshow-frame {
+  height: 270px;
+  min-height: 230px;
 }
 
 .slideshow-frame img {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  top: 50%;
+  left: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
   opacity: 0;
-  transform: scale(1.02);
-  transition: opacity 0.9s ease, transform 2.8s ease;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.9s ease;
 }
 
 .slideshow-frame img.is-active {
   opacity: 1;
-  transform: scale(1);
 }
 
 .slideshow-caption {
@@ -488,11 +509,8 @@ body {
 }
 
 .facility-slideshow .slideshow-frame {
-  height: 360px;
-}
-
-.facility-slideshow .slideshow-frame img {
-  height: 100%;
+  height: 390px;
+  min-height: 280px;
 }
 
 .facility-details h3 {
