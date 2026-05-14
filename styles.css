@@ -285,6 +285,7 @@ body {
 .card-grid {
   display: grid;
   gap: 1.5rem;
+  align-items: stretch;
 }
 
 .card {
@@ -423,12 +424,18 @@ body {
 .research-card-with-slideshow {
   display: flex;
   flex-direction: column;
+  height: 100%;
+}
+
+.research-card-with-slideshow .tagline {
+  margin-bottom: 1rem;
 }
 
 .research-slideshow {
-  margin-top: 1rem;
+  margin-top: auto;
   border: 1px solid rgba(47, 36, 21, 0.08);
   box-shadow: none;
+  flex: 0 0 auto;
 }
 
 .slideshow-frame {
@@ -438,9 +445,9 @@ body {
   min-height: 260px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 25% 20%, rgba(47, 186, 196, 0.15), transparent 35%),
-    radial-gradient(circle at 80% 75%, rgba(240, 179, 90, 0.13), transparent 35%),
-    var(--rio-deep);
+    radial-gradient(circle at 25% 20%, rgba(47, 186, 196, 0.10), transparent 35%),
+    radial-gradient(circle at 80% 75%, rgba(240, 179, 90, 0.12), transparent 35%),
+    #f1eadf;
 }
 
 .research-slideshow .slideshow-frame {
@@ -478,6 +485,25 @@ body {
 .slideshow-caption p {
   font-size: 0.9rem;
   color: #4b5563;
+}
+
+
+#research .card-grid {
+  align-items: stretch;
+}
+
+#research .card {
+  min-height: 100%;
+}
+
+#research .card > h3 {
+  min-height: 2.8rem;
+}
+
+@media (min-width: 768px) {
+  .research-slideshow .slideshow-frame {
+    height: 300px;
+  }
 }
 
 /* =========================================
