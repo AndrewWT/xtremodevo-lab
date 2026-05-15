@@ -1287,3 +1287,25 @@ body {
     margin-top: 0;
   }
 }
+
+
+/* =========================================
+   FACILITY IMAGE POSITION FIX
+   Anchors facility photos to the top of the frame so portrait/tall images
+   do not leave a large blank band above the visible content.
+========================================= */
+
+.facility-slideshow .slideshow-frame img {
+  top: 0;
+  transform: translateX(-50%);
+  max-height: none;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center top;
+}
+
+.facility-slideshow .slideshow-frame {
+  display: block;
+}
