@@ -1402,3 +1402,24 @@ body {
   object-fit: contain;
   object-position: center center;
 }
+
+
+/* =========================================
+   RESOURCE CARD TITLE ALIGNMENT
+   Keeps Killi-Kits heading level with Data & Bioinformatics heading.
+========================================= */
+
+@media (min-width: 900px) {
+  .resources-grid .resource-card-with-image:not(.data-code-card) {
+    align-items: start;
+    align-content: start;
+  }
+
+  .resources-grid .resource-card-with-image:not(.data-code-card) .resource-copy {
+    align-self: start;
+  }
+
+  .resources-grid .resource-card-with-image:not(.data-code-card) .resource-image-card {
+    align-self: center;
+  }
+}
