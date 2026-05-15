@@ -1155,3 +1155,19 @@ body {
     height: 230px;
   }
 }
+
+
+/* =========================================
+   RESEARCH INTRO WIDTH
+   Allows the short research intro to sit on one line on desktop-sized screens.
+========================================= */
+
+#research .section-intro {
+  max-width: 56rem;
+}
+
+@media (max-width: 900px) {
+  #research .section-intro {
+    max-width: 40rem;
+  }
+}
