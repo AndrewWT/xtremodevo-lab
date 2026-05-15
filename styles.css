@@ -1436,3 +1436,13 @@ body {
   max-width: 100%;
   white-space: normal;
 }
+
+
+/* =========================================
+   PEOPLE ROLE STACK
+   Keeps multi-line roles compact in people cards.
+========================================= */
+
+.person-role + .person-role {
+  margin-top: -0.35rem;
+}
