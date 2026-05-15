@@ -1309,3 +1309,96 @@ body {
 .facility-slideshow .slideshow-frame {
   display: block;
 }
+
+
+/* =========================================
+   FACILITY SLIDESHOW FINAL COMPACT FIX
+   The previous top-anchor fix still left empty bands because the frame
+   itself was too tall for several facility photos. This keeps photos
+   uncropped but makes the frame more compact and centers the card cleanly.
+========================================= */
+
+.facility-card {
+  align-items: center;
+}
+
+.facility-slideshow {
+  align-self: center;
+  width: 100%;
+}
+
+.facility-slideshow .slideshow-frame {
+  height: 260px;
+  min-height: 220px;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(47, 186, 196, 0.10), transparent 35%),
+    radial-gradient(circle at 80% 75%, rgba(240, 179, 90, 0.12), transparent 35%),
+    #f1eadf;
+}
+
+.facility-slideshow .slideshow-frame img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center center;
+  transform: translate(-50%, -50%);
+}
+
+@media (min-width: 900px) {
+  .facility-card {
+    grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+  }
+
+  .facility-slideshow .slideshow-frame {
+    height: 280px;
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 767px) {
+  .facility-slideshow .slideshow-frame {
+    height: 240px;
+    min-height: 210px;
+  }
+}
+
+
+/* =========================================
+   KILLI-KITS RESOURCE CARD ALIGNMENT
+   Centers the Killi-Kits image beside the text and reduces empty vertical space.
+========================================= */
+
+@media (min-width: 900px) {
+  .resources-grid .resource-card-with-image:not(.data-code-card) {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.9fr);
+    align-items: center;
+    align-content: center;
+  }
+
+  .resources-grid .resource-card-with-image:not(.data-code-card) .resource-copy {
+    align-self: center;
+  }
+
+  .resources-grid .resource-card-with-image:not(.data-code-card) .resource-image-card {
+    align-self: center;
+    margin: 0;
+  }
+
+  .resources-grid .resource-card-with-image:not(.data-code-card) .resource-image-frame {
+    height: 240px;
+  }
+}
+
+.resources-grid .resource-card-with-image:not(.data-code-card) .resource-image-frame img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center center;
+}
