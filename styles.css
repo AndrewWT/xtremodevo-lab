@@ -1446,3 +1446,78 @@ body {
 .person-role + .person-role {
   margin-top: -0.35rem;
 }
+
+
+/* =========================================
+   LAB ALUMNI
+   Smaller thumbnail cards for former lab members.
+========================================= */
+
+.alumni-block {
+  margin-top: 2rem;
+}
+
+.alumni-heading {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.alumni-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.alumni-card {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: center;
+  background: var(--panel);
+  border-radius: 1rem;
+  padding: 0.85rem;
+  box-shadow: 0 4px 10px rgba(47, 36, 21, 0.12);
+  overflow: hidden;
+}
+
+.alumni-card img {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  object-position: center center;
+  border-radius: 0.75rem;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(47, 186, 196, 0.10), transparent 35%),
+    radial-gradient(circle at 80% 75%, rgba(240, 179, 90, 0.12), transparent 35%),
+    #f1eadf;
+  border: 1px solid rgba(47, 36, 21, 0.08);
+}
+
+.alumni-copy {
+  min-width: 0;
+}
+
+.alumni-copy h4 {
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.alumni-copy p {
+  color: #4b5563;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+@media (min-width: 800px) {
+  .alumni-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .alumni-card {
+    grid-template-columns: 80px minmax(0, 1fr);
+  }
+
+  .alumni-card img {
+    width: 80px;
+    height: 80px;
+  }
+}
